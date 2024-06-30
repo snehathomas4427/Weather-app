@@ -1,5 +1,5 @@
 #stores URL endpoints for the frontend part of the website
-#stores the routes (ex: login page, home page, etc.)
+#stores the routes (ex: login page, home page, etc.) t
 
 from flask import Blueprint, render_template
 

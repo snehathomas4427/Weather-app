@@ -12,7 +12,7 @@ def home():
         location = request.form.get('location')
         #what to do if location isn't valid???? time stamp: 1:03
         if len(location) < 2:
-            flash("No Results Found", category='error')
+            flash('No Results Found', category= 'error')
 
     return render_template('home.html')
 

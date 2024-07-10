@@ -1,7 +1,8 @@
 #stores the URL endpoints/routes (ex: login page, home page, etc.) t
 
-from flask import Blueprint, render_template, request, flash
-from weather import main as get_weather
+from flask import Blueprint, render_template, request, flash, session
+from weather import main_current_weather as get_weather
+from weather import main_daily_weather as daily_weather
 
 #blueprint allows you create routes in different files
 views = Blueprint('views' , __name__)
@@ -21,6 +22,10 @@ def home():
         data = get_weather(city, state, country)
         if data == None:
             flash("No Results Found", category='error')
+        else:
+            session['city'] = city
+            session['state'] = state
+            session['country'] = country
 
     return render_template('base.html', data=data) #This line renders the base.html template and passes the data variable to the template. The data variable can be used within the template to display the fetched weather information.
 
@@ -28,6 +33,13 @@ def home():
 def hourly():
     return render_template('hourly.html')
 
-@views.route('/tenday')
+@views.route('/tenday', methods=['GET', 'POST'])
 def tenday():
-    return render_template('tenday.html')
+    data = None
+    city = session.get('city')
+    state = session.get('state')
+    country = session.get('country')
+    if city and state and country:
+        data = daily_weather(city, state, country)
+    
+    return render_template('tenday.html', data=data)

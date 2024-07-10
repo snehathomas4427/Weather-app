@@ -1,3 +1,18 @@
-{%extends 'base.html'%} 
-{% block title %} 10-Day {% endblock %}
+{% extends 'base.html' %}
+{% block title %} 10-Day Forecast {% endblock %}
 
+{% block content %}
+<h1>10-Day Forecast</h1>
+<p>
+    {% if data %}
+        {% for item in data %}
+            <p>{{ item.description }} <br>
+            <img src="https://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="Icon">
+            <p>{{ item.temp }} °F</p><br>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</p>
+{% endblock %}

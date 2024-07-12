@@ -35,4 +35,4 @@ else:
     sunrise = dt.datetime.utcfromtimestamp(weather_data['sys']['sunrise'] + weather_data['timezone'])
     sunset = dt.datetime.utcfromtimestamp(weather_data['sys']['sunset']+ weather_data['timezone'])
 
-    print(f"current: {temp_fahrenheit}")
+    print(f"current: {sunrise}")

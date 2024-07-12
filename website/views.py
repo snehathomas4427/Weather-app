@@ -11,6 +11,8 @@ views = Blueprint('views' , __name__)
 @views.route('/', methods=['GET', 'POST']) #for the home page. this function will run whenever we go to the '/' route 
 def home():
     data = None
+    city = None
+    state = None
     if request.method == "POST":
         #what to do if location isn't valid???? time stamp: 1:03:00
         #if len(location) < 2:
@@ -27,7 +29,7 @@ def home():
             session['state'] = state
             session['country'] = country
 
-    return render_template('base.html', data=data) #This line renders the base.html template and passes the data variable to the template. The data variable can be used within the template to display the fetched weather information.
+    return render_template('base.html', data=data, city=city, state=state) #This line renders the base.html template and passes the data variable to the template. The data variable can be used within the template to display the fetched weather information.
 
 @views.route('/hourly')
 def hourly():
@@ -36,10 +38,12 @@ def hourly():
 @views.route('/tenday', methods=['GET', 'POST'])
 def tenday():
     data = None
+    city = None
+    state = None
     city = session.get('city')
     state = session.get('state')
     country = session.get('country')
     if city and state and country:
         data = daily_weather(city, state, country)
     
-    return render_template('tenday.html', data=data)
+    return render_template('tenday.html', data=data, city=city, state=state)

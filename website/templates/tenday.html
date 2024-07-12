@@ -1,18 +1,44 @@
 {% extends 'base.html' %}
-{% block title %} 10-Day Forecast {% endblock %}
+{% block title %}5-Day Forecast{% endblock %}
 
 {% block content %}
-<h1>10-Day Forecast</h1>
-<p>
+<div class="container mt-5">
+    <style>
+        .forecast-item {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .forecast-item:hover {
+            background-color: #e9ecef;
+        }
+
+    </style>
+    <h1 class="mb-4">5 Day Forecast</h1> <h5 class="mb-4"> {{city}}, {{state}} </h5>
     {% if data %}
         {% for item in data %}
-            <p>{{ item.description }} <br>
-            <img src="https://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="Icon">
-            <p>{{ item.temp }} °F</p><br>
-            </p>
+            <div class="row forecast-item mb-3 p-3 border rounded align-items-center">
+                <div class="col-auto">
+                    <h5 class="forecast-date">{{ item.time }}</h5>
+                </div>
+                <div class="col-auto">
+                    <img src="https://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="Icon">
+                </div>
+                <div class="col-auto">
+                    <p class="mb-1"><strong>Min Temp:</strong> {{ item.temp_min }}°F</p>
+                    <p class="mb-1"><strong>Max Temp:</strong> {{ item.temp_max }}°F</p>
+                </div>
+                <div class="col-auto">
+                    <p class="mb-1"><strong>Description:</strong> {{ item.description }}</p>
+                </div>
+                <div class="col-auto">
+                    <p class="mb-1"><strong>Precipitation:</strong> {{ item.precipitation }}%</p>
+                </div>
+            </div>
         {% endfor %}
     {% else %}
         <p>No data available.</p>
     {% endif %}
-</p>
+</div>
 {% endblock %}
+

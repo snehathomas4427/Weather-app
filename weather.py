@@ -1,5 +1,5 @@
 import requests
-import datetime as dt
+from datetime import datetime
 from dataclasses import dataclass
 
 api_key = 'ff13222f452ad448227993242c3afbec'
@@ -19,7 +19,9 @@ class HourlyData:
     description: str
     temp: int
     icon: str
-
+    temp_max: int
+    temp_min: int
+    precipitation: int
 
 def get_lat_lon(city_name, state_code, country_code, api_key):
 
@@ -58,14 +60,23 @@ def daily_weather(lat, lon, api_key):
     #print(day_data)
     hourly_data = []
     for hour in day_data['list']:
+        unx_time = datetime.utcfromtimestamp(hour['dt'])
         data = HourlyData(
-            time=hour['dt'],
+            time = unx_time.strftime('%a %d %H:%M'),
             description=hour['weather'][0]['description'],
             temp=hour['main']['temp'],
-            icon=hour['weather'][0]['icon']
+            icon=hour['weather'][0]['icon'],
+            temp_max=hour['main']['temp_max'],
+            temp_min = hour['main']['temp_min'],
+            precipitation = hour['pop']*100
         )
         hourly_data.append(data)
+    hourly_data = hourly_data[::8]
     return hourly_data
+
+def weather_map(api_key):
+    map = requests.get(f"https://tile.openweathermap.org/map/precipitation_new/1/1/1.png?appid={api_key}").json()
+    print(map)
 
 def main_current_weather(city_name, state_name, country_name):
     location = True
@@ -78,7 +89,9 @@ def main_daily_weather(city_name, state_name, country_name):
     weather_data = daily_weather(lat, lon, api_key)
     return weather_data
 
-print(main_daily_weather('Mission','KS', 'US'))
+#print(main_daily_weather('Mission','KS', 'US'))
+#print(main_current_weather('Mission','KS', 'US'))
+#weather_map(api_key)
 
 '''if __name__ == "__main__":
     lat, lon = get_lat_lon('Mission','KS', 'US', api_key)

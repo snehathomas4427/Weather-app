@@ -1,8 +1,41 @@
 {%extends 'base.html'%} 
 {% block title %} Hourly {% endblock %}
 
-{%block content%} 
+{% block content %}
+<div class="container mt-5">
+    <style>
+        .forecast-item {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
 
-<h1>Hourly</h1>
+        .forecast-item:hover {
+            background-color: #e9ecef;
+        }
 
+    </style>
+    <h1 class="mb-4">Hourly Forecast</h1> <h5 class="mb-4"> {{city}}, {{state}} </h5>
+    {% if data %}
+        {% for item in data %}
+            <div class="row forecast-item mb-3 p-3 border rounded align-items-center">
+                <div class="col-auto">
+                    <h6 class="forecast-date">{{ item.time }}</h6>
+                </div>
+                <div class="col-auto">
+                    <h5 class="mb-1"> <strong>{{ item.temp }}°F</strong></h5>
+                </div>
+                <div class="col-auto">
+                    <img src={{item.icon}} alt="Icon">
+                </div>
+                <div class="col-auto">
+                    <p class="mb-1"> {{ item.description }}</p>
+                </div>
+                
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</div>
 {% endblock %}
+

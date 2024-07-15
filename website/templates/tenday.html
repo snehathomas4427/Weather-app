@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}5-Day Forecast{% endblock %}
+{% block title %}10-Day Forecast{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -14,15 +14,15 @@
         }
 
     </style>
-    <h1 class="mb-4">5 Day Forecast</h1> <h5 class="mb-4"> {{city}}, {{state}} </h5>
+    <h1 class="mb-4">10 Day Forecast</h1> <h5 class="mb-4"> {{city}}, {{state}} </h5>
     {% if data %}
         {% for item in data %}
             <div class="row forecast-item mb-3 p-3 border rounded align-items-center">
                 <div class="col-auto">
-                    <h5 class="forecast-date">{{ item.time }}</h5>
+                    <h6 class="forecast-date">{{ item.date }}</h6>
                 </div>
                 <div class="col-auto">
-                    <img src="https://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="Icon">
+                    <img src="{{ item.icon }}" alt="Icon">
                 </div>
                 <div class="col-auto">
                     <p class="mb-1"><strong>Min Temp:</strong> {{ item.temp_min }}°F</p>

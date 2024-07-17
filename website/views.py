@@ -4,9 +4,12 @@ from flask import Blueprint, render_template, request, flash, session
 from weather import main_current_weather as get_weather
 from weather import main_daily_weather as daily_weather
 from weather import main_hourly_weather as hourly_weather
+from weather import give_lat_lon 
 
 #blueprint allows you create routes in different files
 views = Blueprint('views' , __name__)
+
+locations = []
 
 #to define a route:
 @views.route('/', methods=['GET', 'POST']) #for the home page. this function will run whenever we go to the '/' route 
@@ -15,10 +18,6 @@ def home():
     city = None
     state = None
     if request.method == "POST":
-        #what to do if location isn't valid???? time stamp: 1:03:00
-        #if len(location) < 2:
-            #flash("No Results Found", category='error')
-
         city = request.form.get('city')
         state = request.form.get('state')
         country = request.form.get('country')
@@ -65,6 +64,12 @@ def tenday():
 
 @views.route('/map', methods=['GET', 'POST'])
 def map():
-    data=None
-
-    return render_template('map.html')
+    lat,lon = None,None
+    city = None
+    state = None
+    city = session.get('city')
+    state = session.get('state')
+    country = session.get('country')
+    if city and state and country:
+        lat,lon= give_lat_lon(city,state,country)
+    return render_template('map.html', lat=lat, lon=lon)

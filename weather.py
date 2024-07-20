@@ -40,6 +40,10 @@ def get_lat_lon(city_name, state_code, country_code, api_key):
     lat, lon = resp[0]['lat'], resp[0]['lon']
     return lat,lon
 
+def give_lat_lon(city_name, state_code, country_code):
+    lat,lon = get_lat_lon(city_name, state_code, country_code, api_key)
+    return lat,lon
+
 #print(get_lat_lon('Orlando', 'FL', 'US', api_key))
 
 def get_current_weather(lat, lon, api_key):
@@ -47,7 +51,6 @@ def get_current_weather(lat, lon, api_key):
         return None
     else:
         weather_data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial').json()
-        #weather_data = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial").json()
         #print(weather_data)
         data = WeatherData(
             main = weather_data['weather'][0]['main'],
@@ -143,7 +146,12 @@ def main_hourly_weather(city_name, state_name, country_name):
     return weather_data
 
 #print(main_hourly_weather('Mission','KS', 'US'))
-
-print(main_daily_weather('Mission','KS', 'US'))
+#print(main_daily_weather('Mission','KS', 'US'))
 #print(main_current_weather('gra','gre', 'gru'))
 #weather_map(api_key)
+
+'''def map():
+    url = "https://api.tomorrow.io/v4/map/tile/5/0/1/temperature/now.png?apikey=NSDG3a2eTCV6sv8xY5BvBAszQKPdYJcK"
+    headers = {"accept": "text/plain"}
+    response = requests.get(url, headers=headers)
+    print(response.text)'''

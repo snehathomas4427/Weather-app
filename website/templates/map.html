@@ -1,6 +1,64 @@
 {% extends 'base.html' %}
-{% block title %} Map {% endblock %}
+
+{% block head %} 
+<title>Weather Map</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Leaflet CSS from CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<style>
+    /* Set full viewport height and width for the map */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+
+    #weatherMap {
+        height: 93vh; /* Full viewport height */
+        width: 100vw;  /* Full viewport width */
+    }
+</style>
+{% endblock %}
 
 {% block content %} 
-<h1>Map</h1>
+
+<div id="weatherMap"></div>  <!-- This is where the map will be displayed -->
+
+<!-- Leaflet JavaScript from CDN -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    // Get your API key from app.tomorrow.io/development/keys
+    const API_KEY = 'NSDG3a2eTCV6sv8xY5BvBAszQKPdYJcK'; 
+
+    // Pick the field (like temperature, precipitationIntensity or cloudCover)
+    const DATA_FIELD = 'precipitationIntensity';
+
+    // Set the ISO timestamp (now for all fields, up to 6 hours out for precipitationIntensity)
+    const TIMESTAMP = (new Date()).toISOString(); 
+    var lat = "{{lat}}";
+    var lon = "{{lon}}";
+    // Initialize the map
+    var map = L.map('weatherMap', {
+        minZoom: 3,
+        maxZoom: 10
+    }).setView([lat, lon], 5);
+
+    // Set the street view
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Inject the tile layer
+    L.tileLayer(`https://api.tomorrow.io/v4/map/tile/{z}/{x}/{y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`, {
+        attribution: '&copy; <a href="https://www.tomorrow.io/weather-api">Powered by Tomorrow.io</a>', opacity: 0.8
+    }).addTo(map);
+    
+    L.marker([lat, lon]).addTo(map)
+    .openPopup();
+
+</script>
 {% endblock %}
